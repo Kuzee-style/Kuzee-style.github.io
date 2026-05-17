@@ -28,15 +28,16 @@
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
-            overflow: hidden;
+            min-height: 100%;
+            /* overflow: hidden; -> Dihapus agar bisa di-scroll */
+            overflow-x: hidden; /* Mencegah scroll menyamping */
             font-family: var(--font-main);
             background-color: #050505;
         }
 
-        /* --- 3. Background & Canvas Effects --- */
+        /* --- 3. Background & Canvas Effects (Diubah jadi Fixed) --- */
         #bg-image {
-            position: absolute;
+            position: fixed; /* Diubah dari absolute ke fixed */
             inset: -5%;
             width: 110%;
             height: 110%;
@@ -49,7 +50,7 @@
         }
 
         #rain-canvas {
-            position: absolute;
+            position: fixed; /* Diubah dari absolute ke fixed */
             inset: 0;
             width: 100%;
             height: 100%;
@@ -92,12 +93,12 @@
         }
     </style>
 </head>
-<body class="relative flex items-center justify-center min-h-screen text-white">
+<body class="relative flex items-center justify-center min-h-screen text-white py-12">
 
     <div id="bg-image"></div>
     <canvas id="rain-canvas"></canvas>
 
-    <main class="relative z-10 w-full max-w-md px-4">
+    <main class="relative z-10 w-full max-w-md px-4 my-auto">
         <div class="glass-card rounded-3xl p-8 flex flex-col items-center animate-fade-in">
             
             <div class="relative w-28 h-28 mb-5 group">
@@ -109,7 +110,7 @@
             <h1 class="text-3xl font-title tracking-widest font-bold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
                 Hyakuzee
             </h1>
-            <p class="text-xs text-gray-300 mb-8 tracking-[0.2em] uppercase flex items-center gap-2">
+            <p class="text-xs text-gray-300 mb-8 tracking-[0.2em] uppercase flex items-center gap-2 text-center">
                 <span>⛩️</span> Welcome to my realm <span>⛩️</span>
             </p>
 
@@ -122,7 +123,6 @@
     <script>
         /**
          * App Configuration & Data
-         * Data link sekarang dibungkus dalam bentuk Array of Objects
          */
         const AppConfig = {
             links: [
@@ -132,13 +132,6 @@
                     iconClass: "fab fa-instagram",
                     colorClass: "text-pink-500",
                     hoverColorClass: "group-hover:text-pink-400"
-                },
-                {
-                    name: "Facebook",
-                    url: "https://web.facebook.com/hyakuzee.id",
-                    iconClass: "fab fa-facebook",
-                    colorClass: "text-cyan-500",
-                    hoverColorClass: "group-hover:text-cyan-400"
                 },
                 {
                     name: "Discord Server",
@@ -153,8 +146,29 @@
                     iconClass: "fab fa-spotify",
                     colorClass: "text-green-500",
                     hoverColorClass: "group-hover:text-green-400"
+                },
+                // Contoh link tambahan untuk mengetes fungsi scroll
+                {
+                    name: "YouTube Channel",
+                    url: "https://www.youtube.com/@cyan.kaa22",
+                    iconClass: "fab fa-youtube",
+                    colorClass: "text-red-500",
+                    hoverColorClass: "group-hover:text-red-400"
+                },
+                {
+                    name: "X (Twitter)",
+                    url: "https://x.com/yfpkuzee",
+                    iconClass: "fab fa-x-twitter",
+                    colorClass: "text-white",
+                    hoverColorClass: "group-hover:text-gray-300"
+                },
+                {
+                    name: "Facebook",
+                    url: "https://web.facebook.com/hyakuzee.id",
+                    iconClass: "fab fa-facebook",
+                    colorClass: "text-cyan-500",
+                    hoverColorClass: "group-hover:text-cyan-400"
                 }
-                // Jika ingin tambah link baru, cukup copas format objek di atas di sini
             ],
             parallax: {
                 intensity: 20,
@@ -168,7 +182,6 @@
 
         /**
          * Link Manager Class
-         * Bertugas mengambil data array objek dan merendernya menjadi HTML
          */
         class LinkRenderer {
             constructor(containerId, linksData) {
@@ -180,7 +193,6 @@
             render() {
                 if (!this.container) return;
                 
-                // Looping data objek dan membuat elemen HTML
                 const linksHTML = this.linksData.map(link => {
                     return `
                         <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
@@ -189,9 +201,8 @@
                             <span class="font-semibold tracking-wide ml-2">${link.name}</span>
                         </a>
                     `;
-                }).join(''); // join('') untuk menggabungkan array menjadi satu string HTML panjang
+                }).join('');
 
-                // Memasukkan hasil render ke dalam container di HTML
                 this.container.innerHTML = linksHTML;
             }
         }
@@ -310,9 +321,7 @@
          * Application Initialization
          */
         document.addEventListener('DOMContentLoaded', () => {
-            // Render links dari objek
             new LinkRenderer('links-container', AppConfig.links);
-            // Jalankan efek background
             new ParallaxEffect('bg-image', AppConfig.parallax);
             new RainSimulator('rain-canvas', AppConfig.rain);
         });
