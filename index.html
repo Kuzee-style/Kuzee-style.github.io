@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyakuzee - Links</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@400;600&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            background-color: #050505;
+        }
+
+        /* Interactive Background - Japanese Temple */
+        #bg-image {
+            position: absolute;
+            top: -5%;
+            left: -5%;
+            width: 110%;
+            height: 110%;
+            /* Menggunakan gambar kuil jepang HD dari Unsplash */
+            background-image: url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=2070&auto=format&fit=crop'); 
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.35) contrast(1.2);
+            transition: transform 0.1s ease-out;
+            z-index: 0;
+        }
+
+        /* Rain Canvas */
+        #rain-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Glassmorphism Card Effect */
+        .glass-card {
+            background: rgba(20, 20, 20, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
+
+        .font-title {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Custom Hover Glow for Buttons */
+        .link-btn {
+            transition: all 0.3s ease;
+        }
+        .link-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Initial Fade In Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="relative flex items-center justify-center min-h-screen text-white">
+
+    <div id="bg-image"></div>
+
+    <canvas id="rain-canvas"></canvas>
+
+    <main class="relative z-10 w-full max-w-md px-4">
+        <div class="glass-card rounded-3xl p-8 flex flex-col items-center animate-fade-in">
+            
+            <div class="relative w-28 h-28 mb-5 group">
+                <div class="absolute inset-0 bg-white rounded-full opacity-20 blur-md group-hover:opacity-40 transition-opacity duration-300"></div>
+                <img src="webtoon _ season of blossom _ choi jinyoung icon _ pfp.jpeg" alt="Hyakuzee" 
+                     class="relative w-full h-full object-cover rounded-full border-2 border-white/40 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+            </div>
+
+            <h1 class="text-3xl font-title tracking-widest font-bold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Hyakuzee</h1>
+            <p class="text-xs text-gray-300 mb-8 tracking-[0.2em] uppercase flex items-center gap-2">
+                <span>⛩️</span> Welcome to my realm <span>⛩️</span>
+            </p>
+
+            <div class="w-full flex flex-col gap-4">
+                
+                <a href="https://www.instagram.com/cyan.kaa/" target="_blank" class="link-btn flex items-center p-4 rounded-xl border border-white/10 bg-white/5 relative overflow-hidden group">
+                    <i class="fab fa-instagram text-2xl w-8 text-pink-500 group-hover:text-pink-400 transition-colors"></i>
+                    <span class="font-semibold tracking-wide ml-2">Instagram</span>
+                </a>
+
+                <a href="https://discord.gg/GShmrUJKMF" target="_blank" class="link-btn flex items-center p-4 rounded-xl border border-white/10 bg-white/5 relative overflow-hidden group">
+                    <i class="fab fa-discord text-2xl w-8 text-indigo-500 group-hover:text-indigo-400 transition-colors"></i>
+                    <span class="font-semibold tracking-wide ml-2">Discord Server</span>
+                </a>
+
+                <a href="https://open.spotify.com/user/312nrmuwxsw2wt6en2kowrzefqbm?si=1230c37156d44d16" target="_blank" class="link-btn flex items-center p-4 rounded-xl border border-white/10 bg-white/5 relative overflow-hidden group">
+                    <i class="fab fa-spotify text-2xl w-8 text-green-500 group-hover:text-green-400 transition-colors"></i>
+                    <span class="font-semibold tracking-wide ml-2">Spotify</span>
+                </a>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 1. Parallax Background Effect
+        document.addEventListener('mousemove', (e) => {
+            const bg = document.getElementById('bg-image');
+            // Menghitung pergerakan mouse dari tengah layar
+            const x = (e.clientX / window.innerWidth - 0.5) * 20; 
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            // Menggeser background berlawanan arah mouse untuk efek depth
+            bg.style.transform = `translate(${-x}px, ${-y}px) scale(1.05)`;
+        });
+
+        // 2. Rain Effect menggunakan HTML5 Canvas
+        const canvas = document.getElementById('rain-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let raindrops = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Raindrop {
+            constructor() {
+                this.reset();
+                this.y = Math.random() * height; // Start acak agar tidak turun bersamaan
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = -20;
+                this.z = Math.random() * 0.6 + 0.2; // Z-index semu untuk depth (ukuran & kecepatan)
+                this.length = Math.random() * 20 + 15;
+                this.speed = Math.random() * 10 + 15;
+            }
+
+            update() {
+                this.y += this.speed * this.z;
+                this.x -= this.z * 1.5; // Angin miring ke kiri sedikit
+                
+                // Jika melewati layar bawah, reset ke atas
+                if (this.y > height || this.x < 0) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x - (this.z * 1.5), this.y + this.length * this.z);
+                ctx.strokeStyle = `rgba(180, 200, 230, ${this.z * 0.8})`; // Warna hujan agak kebiruan
+                ctx.lineWidth = this.z * 1.5;
+                ctx.lineCap = 'round';
+                ctx.stroke();
+            }
+        }
+
+        // Membuat 150 rintik hujan
+        for (let i = 0; i < 150; i++) {
+            raindrops.push(new Raindrop());
+        }
+
+        function animateRain() {
+            ctx.clearRect(0, 0, width, height);
+            raindrops.forEach(drop => {
+                drop.update();
+                drop.draw();
+            });
+            requestAnimationFrame(animateRain);
+        }
+
+        animateRain();
+    </script>
+</body>
+</html>
