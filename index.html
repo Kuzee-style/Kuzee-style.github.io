@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hyakuzee - Links</title>
     
+    <!-- Dependencies -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
+    <!-- Custom Styles -->
     <style>
         /* --- 1. CSS Variables Configuration --- */
         :root {
@@ -29,19 +31,20 @@
             padding: 0;
             width: 100%;
             min-height: 100%;
-            /* overflow: hidden; -> Dihapus agar bisa di-scroll */
-            overflow-x: hidden; /* Mencegah scroll menyamping */
+            overflow-x: hidden; 
             font-family: var(--font-main);
             background-color: #050505;
         }
 
-        /* --- 3. Background & Canvas Effects (Diubah jadi Fixed) --- */
+        /* --- 3. Background & Canvas Effects --- */
         #bg-image {
-            position: fixed; /* Diubah dari absolute ke fixed */
+            position: fixed; 
             inset: -5%;
             width: 110%;
             height: 110%;
-            background-image: url('https://images.unsplash.com/photo-1528360983277-13d401cdc186?q=80&w=2070&auto=format&fit=crop'); 
+            /* Gambar Kuil Jepang baru yang suasananya lebih pas */
+            /* Jika punya foto sendiri, ganti isi url() dengan nama filemu, misal: url('kuil.jpg') */
+            background-image: url('https://images.unsplash.com/photo-1545569341-9eb8b30979d9?q=80&w=2070&auto=format&fit=crop'); 
             background-size: cover;
             background-position: center;
             filter: brightness(0.35) contrast(1.2);
@@ -50,7 +53,7 @@
         }
 
         #rain-canvas {
-            position: fixed; /* Diubah dari absolute ke fixed */
+            position: fixed; 
             inset: 0;
             width: 100%;
             height: 100%;
@@ -91,35 +94,82 @@
         .animate-fade-in {
             animation: fadeIn 1s ease-out forwards;
         }
+
+        /* Animasi berdenyut untuk tombol musik saat dimainkan */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.6); }
+            100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
+        }
+        .music-playing {
+            animation: pulse-glow 2s infinite;
+            border-color: rgba(255, 255, 255, 0.5) !important;
+        }
+        
+        /* Animasi putar ikon nada */
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .icon-spin {
+            animation: spin-slow 4s linear infinite;
+        }
     </style>
 </head>
 <body class="relative flex items-center justify-center min-h-screen text-white py-12">
 
+    <!-- Visual Effects Layer -->
     <div id="bg-image"></div>
     <canvas id="rain-canvas"></canvas>
 
+    <!-- Audio Element -->
+    <audio id="bg-audio" loop preload="auto">
+        <source src="shinunoga.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Floating Music Button -->
+    <button id="music-btn" class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full glass-card flex items-center justify-center text-white hover:bg-white/10 transition-all cursor-pointer">
+        <i id="music-icon" class="fas fa-music text-xl"></i>
+    </button>
+
+    <!-- Main Content Layer -->
     <main class="relative z-10 w-full max-w-md px-4 my-auto">
         <div class="glass-card rounded-3xl p-8 flex flex-col items-center animate-fade-in">
             
-            <div class="relative w-28 h-28 mb-5 group">
+            <!-- Profile Section -->
+            <div class="relative w-28 h-28 mb-4 group">
                 <div class="absolute inset-0 bg-white rounded-full opacity-20 blur-md group-hover:opacity-40 transition-opacity duration-300"></div>
                 <img src="webtoon _ season of blossom _ choi jinyoung icon _ pfp.jpeg" alt="Hyakuzee Profile" 
                      class="relative w-full h-full object-cover rounded-full border-2 border-white/40 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
             </div>
 
-            <h1 class="text-3xl font-title tracking-widest font-bold mb-1 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                Hyakuzee
-            </h1>
-            <p class="text-xs text-gray-300 mb-8 tracking-[0.2em] uppercase flex items-center gap-2 text-center">
-                <span>⛩️</span> Welcome to my realm <span>⛩️</span>
-            </p>
+            <!-- Header Section -->
+            <header class="flex flex-col items-center mb-8 w-full">
+                <!-- Main Name -->
+                <h1 class="text-3xl font-title tracking-widest font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+                    Hyakuzee
+                </h1>
+                
+                <!-- Subtitle (English & Japanese) -->
+                <div class="mt-2 flex flex-col items-center gap-1 border-t border-white/10 pt-3 w-3/4">
+                    <p class="text-[10px] sm:text-xs text-gray-300 tracking-[0.2em] uppercase flex items-center gap-2 text-center">
+                        <span>⛩️</span> Welcome to my dream <span>⛩️</span>
+                    </p>
+                    <p class="text-[11px] text-gray-400 tracking-widest text-center font-medium opacity-80">
+                        私の夢へようこそ
+                    </p>
+                </div>
+            </header>
 
+            <!-- Navigation Links -->
             <nav id="links-container" class="w-full flex flex-col gap-4" aria-label="Social Links">
-                </nav>
+                <!-- Data akan dirender di sini -->
+            </nav>
 
         </div>
     </main>
 
+    <!-- JavaScript Controllers -->
     <script>
         /**
          * App Configuration & Data
@@ -147,7 +197,6 @@
                     colorClass: "text-green-500",
                     hoverColorClass: "group-hover:text-green-400"
                 },
-                // Contoh link tambahan untuk mengetes fungsi scroll
                 {
                     name: "YouTube Channel",
                     url: "https://www.youtube.com/@cyan.kaa22",
@@ -177,8 +226,49 @@
                 dropCount: 150,
                 colorRGB: '180, 200, 230',
                 angle: 1.5
+            },
+            audio: {
+                volume: 0.4 // Volume BGM (0.0 sampai 1.0)
             }
         };
+
+        /**
+         * Audio Controller Class
+         */
+        class AudioController {
+            constructor(audioId, btnId, iconId, config) {
+                this.audio = document.getElementById(audioId);
+                this.btn = document.getElementById(btnId);
+                this.icon = document.getElementById(iconId);
+                this.isPlaying = false;
+                this.config = config;
+
+                this.init();
+            }
+
+            init() {
+                if (!this.audio || !this.btn) return;
+                
+                this.audio.volume = this.config.volume;
+                this.btn.addEventListener('click', () => this.toggleAudio());
+            }
+
+            toggleAudio() {
+                if (this.isPlaying) {
+                    this.audio.pause();
+                    this.icon.classList.remove('icon-spin');
+                    this.btn.classList.remove('music-playing');
+                } else {
+                    this.audio.play().catch(error => {
+                        console.error("Gagal memutar audio:", error);
+                        alert("Pastikan file shinunoga.mp3 sudah ada di folder yang sama.");
+                    });
+                    this.icon.classList.add('icon-spin');
+                    this.btn.classList.add('music-playing');
+                }
+                this.isPlaying = !this.isPlaying;
+            }
+        }
 
         /**
          * Link Manager Class
@@ -324,6 +414,7 @@
             new LinkRenderer('links-container', AppConfig.links);
             new ParallaxEffect('bg-image', AppConfig.parallax);
             new RainSimulator('rain-canvas', AppConfig.rain);
+            new AudioController('bg-audio', 'music-btn', 'music-icon', AppConfig.audio);
         });
     </script>
 </body>
